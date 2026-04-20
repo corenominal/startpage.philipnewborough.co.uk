@@ -5,12 +5,27 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
+$routes->get('/', 'Startpage::index');
+$routes->get('/opensearch.xml', 'Startpage::opensearch');
+
+// Startpage management routes
+$routes->get('/start/search', 'Startpage_search::index');
+$routes->get('/start/history', 'Startpage_history::index');
+$routes->get('/start/redirects', 'Startpage_redirects::index');
 
 // Admin routes
 $routes->get('/admin', 'Admin\Home::index');
 $routes->get('/admin/datatable', 'Admin\Home::datatable');
 $routes->post('/admin/delete', 'Admin\Home::delete');
+
+// Admin import / export routes
+$routes->get('/admin/import-export', 'Admin\ImportExport::index');
+$routes->get('/admin/export/history', 'Admin\ImportExport::exportHistory');
+$routes->get('/admin/export/redirects', 'Admin\ImportExport::exportRedirects');
+$routes->get('/admin/export/search', 'Admin\ImportExport::exportSearch');
+$routes->post('/admin/import/history', 'Admin\ImportExport::importHistory');
+$routes->post('/admin/import/redirects', 'Admin\ImportExport::importRedirects');
+$routes->post('/admin/import/search', 'Admin\ImportExport::importSearch');
 
 // API routes
 $routes->match(['get', 'options'], '/api/test/ping', 'Api\Test::ping');

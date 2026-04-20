@@ -9,6 +9,7 @@
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/icon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/icon-16x16.png">
+        <link rel="search" type="application/opensearchdescription+xml" title="<?= esc(config('App')->siteName) ?>" href="/opensearch.xml">
         <!-- Stylesheets Remote -->
         <link rel="stylesheet" href="<?= config('Urls')->assets ?>assets/css/vendor/bootstrap.css"/>
         <link rel="stylesheet" href="<?= config('Urls')->assets ?>assets/css/vendor/bootstrap-icons.css"/>
@@ -109,7 +110,22 @@
                         <ul class="nav flex-column mb-3">
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2 text-white-50 px-3 py-2 active" href="/">
-                                    <i class="bi bi-speedometer2"></i> Dashboard
+                                    <i class="bi bi-search"></i> Search
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2 text-white-50 px-3 py-2" href="/start/redirects">
+                                    <i class="bi bi-arrow-left-right"></i> Redirects
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2 text-white-50 px-3 py-2" href="/start/search">
+                                    <i class="bi bi-search"></i> Search Engines
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2 text-white-50 px-3 py-2" href="/start/history">
+                                    <i class="bi bi-clock-history"></i> History
                                 </a>
                             </li>
                         </ul>
@@ -122,6 +138,11 @@
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2 text-white-50 px-3 py-2" href="/admin">
                                     <i class="bi bi-speedometer2"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2 text-white-50 px-3 py-2" href="/admin/import-export">
+                                    <i class="bi bi-arrow-down-up"></i> Import / Export
                                 </a>
                             </li>
                         </ul>
