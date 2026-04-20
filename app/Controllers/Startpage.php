@@ -49,6 +49,7 @@ class Startpage extends BaseController
         $data['redirects']      = $redirectsModel->findAll();
         $data['search_engines'] = $searchModel->findAll();
 
+        $data['datatables'] = true;
         $data['js']    = ['startpage'];
         $data['css']   = [];
         $data['title'] = 'Start Page';

@@ -11,6 +11,7 @@ $routes->get('/opensearch.xml', 'Startpage::opensearch');
 // Startpage management routes
 $routes->get('/start/search', 'Startpage_search::index');
 $routes->get('/start/history', 'Startpage_history::index');
+$routes->post('/start/history/delete', 'Startpage_history::delete');
 $routes->get('/start/redirects', 'Startpage_redirects::index');
 
 // Admin routes
