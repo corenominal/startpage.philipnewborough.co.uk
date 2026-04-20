@@ -17,6 +17,10 @@ $routes->post('/start/search/delete', 'Startpage_search::delete');
 $routes->get('/start/history', 'Startpage_history::index');
 $routes->post('/start/history/delete', 'Startpage_history::delete');
 $routes->get('/start/redirects', 'Startpage_redirects::index');
+$routes->get('/start/redirects/datatable', 'Startpage_redirects::datatable');
+$routes->post('/start/redirects/add', 'Startpage_redirects::add');
+$routes->post('/start/redirects/edit', 'Startpage_redirects::edit');
+$routes->post('/start/redirects/delete', 'Startpage_redirects::delete');
 
 // Admin routes
 $routes->get('/admin', 'Admin\Home::index');
