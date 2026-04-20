@@ -129,3 +129,15 @@ _modules/*
 
 /results/
 /phpunit*.xml
+
+#-------------------------
+# Shortcut Icons
+#-------------------------
+public/icons/*
+!public/icons/.gitkeep
+
+#-------------------------
+# Shortcut Icons
+#-------------------------
+public/icons/*
+!public/icons/.gitkeep

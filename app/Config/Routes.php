@@ -27,6 +27,17 @@ $routes->get('/admin', 'Admin\Home::index');
 $routes->get('/admin/datatable', 'Admin\Home::datatable');
 $routes->post('/admin/delete', 'Admin\Home::delete');
 
+// Admin shortcuts routes
+$routes->get('/admin/shortcuts', 'Admin\Shortcuts::index');
+$routes->post('/admin/shortcuts/category/add', 'Admin\Shortcuts::categoryAdd');
+$routes->post('/admin/shortcuts/category/edit', 'Admin\Shortcuts::categoryEdit');
+$routes->post('/admin/shortcuts/category/delete', 'Admin\Shortcuts::categoryDelete');
+$routes->post('/admin/shortcuts/category/reorder', 'Admin\Shortcuts::categoryReorder');
+$routes->post('/admin/shortcuts/add', 'Admin\Shortcuts::shortcutAdd');
+$routes->post('/admin/shortcuts/edit', 'Admin\Shortcuts::shortcutEdit');
+$routes->post('/admin/shortcuts/delete', 'Admin\Shortcuts::shortcutDelete');
+$routes->post('/admin/shortcuts/reorder', 'Admin\Shortcuts::shortcutReorder');
+
 // Admin import / export routes
 $routes->get('/admin/import-export', 'Admin\ImportExport::index');
 $routes->get('/admin/export/history', 'Admin\ImportExport::exportHistory');

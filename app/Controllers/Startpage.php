@@ -9,6 +9,8 @@ class Startpage extends BaseController
         $historyModel   = model('StartHistoryModel');
         $redirectsModel = model('StartRedirectsModel');
         $searchModel    = model('StartSearchModel');
+        $categoryModel  = model('StartShortcutCategoryModel');
+        $shortcutModel  = model('StartShortcutModel');
 
         // Handle query string (e.g. from browser address bar via OpenSearch)
         if (null !== $this->request->getGet('q')) {
@@ -48,6 +50,16 @@ class Startpage extends BaseController
         $data['history']        = $historyModel->orderBy('updated_at', 'DESC')->findAll(50);
         $data['redirects']      = $redirectsModel->findAll();
         $data['search_engines'] = $searchModel->findAll();
+
+        $categories = $categoryModel->orderBy('sort_order', 'ASC')->findAll();
+        foreach ($categories as &$cat) {
+            $cat['shortcuts'] = $shortcutModel
+                ->where('category_id', $cat['id'])
+                ->orderBy('sort_order', 'ASC')
+                ->findAll();
+        }
+        unset($cat);
+        $data['shortcut_categories'] = $categories;
 
         $data['datatables'] = true;
         $data['js']    = ['startpage'];
