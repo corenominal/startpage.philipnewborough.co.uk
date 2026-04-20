@@ -125,6 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     qNavInput.addEventListener('keydown', function(e) {
       if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+      const typeahead = document.getElementById('q-typeahead');
+      if (typeahead && !typeahead.classList.contains('d-none')) return;
       e.preventDefault();
 
       if (historyNavIndex === -1) {
@@ -266,5 +268,114 @@ document.addEventListener('DOMContentLoaded', () => {
       }).remove().draw(false);
     })
     .catch(err => console.error('Delete failed:', err));
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const qInput = document.getElementById('q');
+  if (!qInput) return;
+
+  const inputGroup = qInput.closest('.input-group');
+  if (!inputGroup) return;
+
+  inputGroup.style.position = 'relative';
+
+  const dropdown = document.createElement('ul');
+  dropdown.id = 'q-typeahead';
+  dropdown.className = 'q-typeahead d-none';
+  dropdown.setAttribute('role', 'listbox');
+  inputGroup.appendChild(dropdown);
+
+  let activeIndex = -1;
+  let debounceTimer = null;
+  let currentSuggestions = [];
+
+  function showDropdown(suggestions) {
+    currentSuggestions = suggestions;
+    activeIndex = -1;
+    dropdown.innerHTML = '';
+
+    if (suggestions.length === 0) {
+      hideDropdown();
+      return;
+    }
+
+    suggestions.forEach((text, i) => {
+      const li = document.createElement('li');
+      li.className = 'q-typeahead__item';
+      li.setAttribute('role', 'option');
+      li.dataset.index = i;
+      li.textContent = text;
+
+      li.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        selectSuggestion(text);
+      });
+
+      dropdown.appendChild(li);
+    });
+
+    dropdown.classList.remove('d-none');
+  }
+
+  function hideDropdown() {
+    dropdown.classList.add('d-none');
+    activeIndex = -1;
+    currentSuggestions = [];
+  }
+
+  function setActiveItem(index) {
+    dropdown.querySelectorAll('.q-typeahead__item').forEach((item, i) => {
+      item.classList.toggle('active', i === index);
+    });
+    activeIndex = index;
+  }
+
+  function selectSuggestion(text) {
+    qInput.value = text;
+    hideDropdown();
+    qInput.focus();
+  }
+
+  qInput.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    const q = qInput.value.trim();
+
+    if (q.length === 0) {
+      hideDropdown();
+      return;
+    }
+
+    debounceTimer = setTimeout(() => {
+      fetch('/start/history/suggestions?q=' + encodeURIComponent(q))
+        .then(res => res.json())
+        .then(data => showDropdown(Array.isArray(data) ? data : []))
+        .catch(() => hideDropdown());
+    }, 200);
+  });
+
+  qInput.addEventListener('keydown', (e) => {
+    if (dropdown.classList.contains('d-none')) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setActiveItem(Math.min(activeIndex + 1, currentSuggestions.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActiveItem(Math.max(activeIndex - 1, -1));
+    } else if (e.key === 'Enter' && activeIndex >= 0) {
+      e.preventDefault();
+      selectSuggestion(currentSuggestions[activeIndex]);
+    } else if (e.key === 'Escape') {
+      hideDropdown();
+    }
+  });
+
+  qInput.addEventListener('blur', () => {
+    setTimeout(() => hideDropdown(), 150);
+  });
+
+  document.getElementById('form-q')?.addEventListener('submit', () => {
+    hideDropdown();
   });
 });

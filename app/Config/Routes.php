@@ -15,6 +15,7 @@ $routes->post('/start/search/add', 'Startpage_search::add');
 $routes->post('/start/search/edit', 'Startpage_search::edit');
 $routes->post('/start/search/delete', 'Startpage_search::delete');
 $routes->get('/start/history', 'Startpage_history::index');
+$routes->get('/start/history/suggestions', 'Startpage_history::suggestions');
 $routes->post('/start/history/delete', 'Startpage_history::delete');
 $routes->get('/start/redirects', 'Startpage_redirects::index');
 $routes->get('/start/redirects/datatable', 'Startpage_redirects::datatable');

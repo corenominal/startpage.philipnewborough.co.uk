@@ -15,6 +15,25 @@ class Startpage_history extends BaseController
         return view('startpage_history', $data);
     }
 
+    public function suggestions(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $q = trim((string) $this->request->getGet('q'));
+
+        if ($q === '') {
+            return $this->response->setJSON([]);
+        }
+
+        $model   = model('StartHistoryModel');
+        $results = $model
+            ->like('q', $q)
+            ->orderBy('count', 'DESC')
+            ->orderBy('updated_at', 'DESC')
+            ->limit(10)
+            ->findAll();
+
+        return $this->response->setJSON(array_column($results, 'q'));
+    }
+
     public function delete(): \CodeIgniter\HTTP\ResponseInterface
     {
         $json = $this->request->getJSON(true);
