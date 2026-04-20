@@ -10,6 +10,10 @@ $routes->get('/opensearch.xml', 'Startpage::opensearch');
 
 // Startpage management routes
 $routes->get('/start/search', 'Startpage_search::index');
+$routes->get('/start/search/datatable', 'Startpage_search::datatable');
+$routes->post('/start/search/add', 'Startpage_search::add');
+$routes->post('/start/search/edit', 'Startpage_search::edit');
+$routes->post('/start/search/delete', 'Startpage_search::delete');
 $routes->get('/start/history', 'Startpage_history::index');
 $routes->post('/start/history/delete', 'Startpage_history::delete');
 $routes->get('/start/redirects', 'Startpage_redirects::index');
