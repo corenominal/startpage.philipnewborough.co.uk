@@ -6,9 +6,11 @@ class Startpage_history extends BaseController
 {
     public function index(): string
     {
-        $data['js']    = ['startpage-history'];
-        $data['css']   = [];
-        $data['title'] = 'Start Page History';
+        $data['history']    = model('StartHistoryModel')->orderBy('updated_at', 'DESC')->findAll();
+        $data['datatables'] = true;
+        $data['js']         = ['startpage-history'];
+        $data['css']        = [];
+        $data['title']      = 'Start Page History';
 
         return view('startpage_history', $data);
     }
