@@ -39,6 +39,9 @@ $routes->post('/admin/import/search', 'Admin\ImportExport::importSearch');
 // API routes
 $routes->match(['get', 'options'], '/api/test/ping', 'Api\Test::ping');
 
+// Startpage command route
+$routes->post('/command', 'Startpage::command');
+
 // Command line routes
 $routes->cli('cli/test/index/(:segment)', 'CLI\Test::index/$1');
 $routes->cli('cli/test/count', 'CLI\Test::count');

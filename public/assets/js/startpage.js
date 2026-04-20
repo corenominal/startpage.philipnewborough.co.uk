@@ -13,6 +13,99 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+  const spinnerHtml = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+  const iconHtml    = '<i class="bi bi-chevron-right"></i>';
+
+  const toastEl   = document.getElementById('command-toast');
+  const toastBody = document.getElementById('command-toast-body');
+  const toast     = toastEl ? new bootstrap.Toast(toastEl, { delay: 4000 }) : null;
+
+  function showNotification(message) {
+    if (toast && toastBody) {
+      toastBody.textContent = message;
+      toast.show();
+    }
+  }
+
+  function resetForm() {
+    const qIcon  = document.getElementById('q-icon');
+    const qInput = document.getElementById('q');
+    if (qIcon)  qIcon.innerHTML = iconHtml;
+    if (qInput) {
+      qInput.removeAttribute('disabled');
+      qInput.value = '';
+      qInput.focus();
+    }
+  }
+
+  document.getElementById('form-q')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const qInput = document.getElementById('q');
+    const q      = qInput?.value.trim() ?? '';
+    if (!q) return;
+
+    document.getElementById('q-icon').innerHTML = spinnerHtml;
+    qInput.setAttribute('disabled', 'disabled');
+
+    fetch('/command', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ q }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.url) {
+          window.location.href = data.url;
+          return;
+        }
+        if (data.html) {
+          document.getElementById('response_html').innerHTML = data.html;
+          document.getElementById('response_holder').classList.remove('d-none');
+          resetForm();
+          return;
+        }
+        if (data.notification) {
+          showNotification(data.notification);
+          resetForm();
+          return;
+        }
+        resetForm();
+      })
+      .catch(() => resetForm());
+  });
+
+  // Clear HTML response
+  document.getElementById('btn-clear-html-response')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('response_html').innerHTML = '';
+    document.getElementById('response_holder').classList.add('d-none');
+    document.getElementById('q')?.focus();
+  });
+
+  // Populate search input from a redirect anchor click
+  document.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('anchor-redirect')) return;
+    e.preventDefault();
+    const qInput = document.getElementById('q');
+    if (qInput) {
+      qInput.value = e.target.textContent.trim();
+      document.getElementById('form-q')?.dispatchEvent(new Event('submit'));
+    }
+  });
+
+  // Pre-fill search input with search-engine phrase on anchor click
+  document.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('anchor-search-engine')) return;
+    e.preventDefault();
+    const qInput = document.getElementById('q');
+    if (qInput) {
+      qInput.value = e.target.textContent.trim() + ' ';
+      qInput.focus();
+    }
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
   const selectedIds = new Set();
 
   function updateDeleteButton() {

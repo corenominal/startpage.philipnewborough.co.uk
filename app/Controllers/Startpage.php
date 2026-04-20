@@ -57,6 +57,111 @@ class Startpage extends BaseController
         return view('startpage', $data);
     }
 
+    public function command(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        if (! $this->request->is('json')) {
+            return $this->response->setJSON(['error' => 'Expecting JSON data.']);
+        }
+
+        $data = $this->request->getJSON(true);
+
+        if (empty($data['q'])) {
+            return $this->response->setJSON(['error' => 'No query provided.']);
+        }
+
+        $q = trim((string) $data['q']);
+
+        // Save the query to history
+        $historyModel = model('StartHistoryModel');
+        $existing     = $historyModel->where('q', $q)->first();
+        if ($existing === null) {
+            $historyModel->insert(['q' => $q, 'count' => 1]);
+        } else {
+            $historyModel->update($existing['id'], ['count' => $existing['count'] + 1]);
+        }
+
+        $response      = $this->processQuery($q);
+        $response['q'] = $q;
+
+        return $this->response->setJSON($response);
+    }
+
+    private function processQuery(string $q): array
+    {
+        // Test for URL input
+        if (str_starts_with($q, 'https://') || str_starts_with($q, 'http://')) {
+            if (filter_var($q, FILTER_VALIDATE_URL)) {
+                return ['url' => $q];
+            }
+        }
+
+        // Test for /command
+        if (str_starts_with($q, '/')) {
+            return $this->processCommand($q);
+        }
+
+        // Test for exact redirect match
+        $redirectsModel = model('StartRedirectsModel');
+        $redirect       = $redirectsModel->where('phrase', $q)->first();
+        if ($redirect) {
+            return ['url' => $redirect['url']];
+        }
+
+        // Test for search engine phrase prefix match (e.g. "g foo bar")
+        if (strpos($q, ' ') !== false) {
+            $terms       = explode(' ', $q);
+            $searchModel = model('StartSearchModel');
+            $search      = $searchModel->where('phrase', $terms[0])->first();
+            if ($search) {
+                unset($terms[0]);
+                $term = implode(' ', $terms);
+                $url  = str_replace('%s', urlencode($term), $search['url']);
+                return ['url' => $url];
+            }
+        }
+
+        // Default: Google search
+        return ['url' => 'https://www.google.com/search?q=' . urlencode($q)];
+    }
+
+    private function processCommand(string $q): array
+    {
+        if ($q === '/ping') {
+            return ['notification' => 'pong!'];
+        }
+
+        if ($q === '/hello') {
+            return ['html' => '<p>Hello, World!</p>'];
+        }
+
+        if (strpos($q, ' ') !== false) {
+            [$command, $rest] = explode(' ', $q, 2);
+            $args             = trim($rest);
+
+            if ($command === '/ping') {
+                $output = shell_exec('ping -c 5 ' . escapeshellarg($args)) ?? '';
+                return ['html' => '<pre><code>' . htmlspecialchars($output, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</code></pre>'];
+            }
+
+            if ($command === '/whois') {
+                $output = shell_exec('whois ' . escapeshellarg($args)) ?? '';
+                return ['html' => '<pre><code>' . htmlspecialchars($output, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</code></pre>'];
+            }
+
+            if ($command === '/dig') {
+                $output = shell_exec('dig ' . escapeshellarg($args)) ?? '';
+                return ['html' => '<pre><code>' . htmlspecialchars($output, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</code></pre>'];
+            }
+
+            if ($command === '/headers') {
+                $output = shell_exec('curl --head ' . escapeshellarg($args)) ?? '';
+                return ['html' => '<pre><code>' . htmlspecialchars($output, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</code></pre>'];
+            }
+        }
+
+        return ['notification' => 'Unrecognised command.'];
+    }
+
     public function opensearch(): string
     {
         $this->response->setHeader('Content-type', 'text/xml');
