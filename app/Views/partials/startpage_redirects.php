@@ -4,7 +4,7 @@
 
 <h3 class="d-xl-none">Redirects</h3>
 
-<table class="table table-striped">
+<table class="table table-striped redirects-table">
     <thead>
         <tr>
             <th>Phrase</th>
@@ -15,7 +15,7 @@
         <?php foreach ($redirects as $redirect): ?>
             <tr>
                 <td><a class="anchor-redirect" href="#"><?= esc($redirect['phrase']) ?></a></td>
-                <td><?= esc($redirect['url']) ?></td>
+                <td class="redirects-table__url" title="<?= esc($redirect['url']) ?>"><?= esc($redirect['url']) ?></td>
             </tr>
         <?php endforeach; ?>
     </tbody>

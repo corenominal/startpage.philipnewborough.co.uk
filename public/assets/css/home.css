@@ -1,0 +1,10 @@
+.redirects-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.redirects-table__url {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

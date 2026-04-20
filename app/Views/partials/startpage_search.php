@@ -4,7 +4,7 @@
 
 <h3 class="d-xl-none">Search Engines</h3>
 
-<table class="table table-striped">
+<table class="table table-striped redirects-table">
     <thead>
         <tr>
             <th>Phrase</th>
@@ -15,7 +15,7 @@
         <?php foreach ($search_engines as $engine): ?>
             <tr>
                 <td><a class="anchor-search-engine" href="#"><?= esc($engine['phrase']) ?></a></td>
-                <td><?= esc($engine['url']) ?></td>
+                <td class="redirects-table__url" title="<?= esc($engine['url']) ?>"><?= esc($engine['url']) ?></td>
             </tr>
         <?php endforeach; ?>
     </tbody>

@@ -51,7 +51,7 @@ class Startpage extends BaseController
 
         $data['datatables'] = true;
         $data['js']    = ['startpage'];
-        $data['css']   = [];
+        $data['css']   = ['home'];
         $data['title'] = 'Start Page';
 
         return view('startpage', $data);
