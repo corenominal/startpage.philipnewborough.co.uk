@@ -46,7 +46,8 @@ $routes->post('/admin/import/redirects', 'Admin\ImportExport::importRedirects');
 $routes->post('/admin/import/search', 'Admin\ImportExport::importSearch');
 
 // API routes
-$routes->match(['get', 'options'], '/api/test/ping', 'Api\Test::ping');
+$routes->match(['get', 'options'],  '/api/test/ping',  'Api\Test::ping');
+$routes->match(['post', 'options'], '/api/redirects',  'Api\Redirects::create');
 
 // Startpage command route
 $routes->post('/command', 'Startpage::command');

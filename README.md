@@ -81,8 +81,41 @@ Key configuration files under `app/Config/`:
 | `/admin/import-export` | Import / export data |
 | `/command` | JSON command endpoint |
 | `/opensearch.xml` | OpenSearch descriptor |
-| `/api/test/ping` | API health check |
+| `GET /api/test/ping` | API health check |
+| `POST /api/redirects` | Create a redirect |
 | `/logout` | End session |
+
+## API
+
+All API routes are protected by key-based authentication. Send the API key in the request header:
+
+```
+apikey: <your-api-key>
+```
+
+The master key is configured via `.env` as `apikeys.masterKey`.
+
+### `POST /api/redirects`
+
+Creates a new redirect.
+
+**Request body (JSON):**
+
+```json
+{
+  "phrase": "gh",
+  "url": "https://github.com"
+}
+```
+
+**Responses:**
+
+| Status | Body |
+|--------|------|
+| 200 | `{ "phrase": "gh", "url": "https://github.com" }` |
+| 200 | `{ "error": "Redirect already exists." }` |
+| 200 | `{ "error": "Expecting JSON data." }` |
+| 401 | `{ "error": "Unauthorized" }` |
 
 ## License
 
