@@ -24,8 +24,6 @@ $routes->post('/start/redirects/delete', 'Startpage_redirects::delete');
 
 // Admin routes
 $routes->get('/admin', 'Admin\Home::index');
-$routes->get('/admin/datatable', 'Admin\Home::datatable');
-$routes->post('/admin/delete', 'Admin\Home::delete');
 
 // Admin shortcuts routes
 $routes->get('/admin/shortcuts', 'Admin\Shortcuts::index');

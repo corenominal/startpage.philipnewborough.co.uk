@@ -4,64 +4,127 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            
-            <div class="border-bottom border-1 mb-4 pb-4 d-flex align-items-center justify-content-between gap-3">
-                <h2 class="mb-0">Admin Home</h2>
-                <div class="" role="group" aria-label="Page actions">
-                    <button type="button" class="btn btn-outline-primary"><i class="bi bi-plus-circle-fill"></i><span class="d-none d-lg-inline"> New</span></button>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-outline-primary dropdown-toggle" id="btn-status-filter" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-funnel-fill"></i><span class="d-none d-lg-inline"> Status: All</span></button>
-                        <ul class="dropdown-menu" aria-labelledby="btn-status-filter">
-                            <li><a class="dropdown-item status-filter-item active" href="#" data-value="">All</a></li>
-                            <li><a class="dropdown-item status-filter-item" href="#" data-value="Active">Active</a></li>
-                            <li><a class="dropdown-item status-filter-item" href="#" data-value="Inactive">Inactive</a></li>
-                            <li><a class="dropdown-item status-filter-item" href="#" data-value="Banned">Banned</a></li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn btn-outline-primary" id="btn-datatable-refresh"><i class="bi bi-arrow-clockwise"></i><span class="d-none d-lg-inline"> Refresh</span></button>
-                    <button type="button" class="btn btn-outline-danger" id="btn-delete" disabled><i class="bi bi-trash3-fill"></i><span class="d-none d-lg-inline"> Delete</span></button>
+
+            <div class="border-bottom border-1 mb-4 pb-4">
+                <h2 class="mb-0">Dashboard</h2>
+            </div>
+
+            <!-- Stat cards -->
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-md-4 col-lg-2">
+                    <a href="/admin/shortcuts" class="text-decoration-none">
+                        <div class="card h-100 bg-dark-subtle">
+                            <div class="card-body text-center">
+                                <div class="fs-2 fw-bold text-primary"><?= esc($stats['shortcuts']) ?></div>
+                                <div class="text-secondary small mt-1"><i class="bi bi-bookmark-fill me-1"></i>Shortcuts</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <a href="/admin/shortcuts" class="text-decoration-none">
+                        <div class="card h-100 bg-dark-subtle">
+                            <div class="card-body text-center">
+                                <div class="fs-2 fw-bold text-primary"><?= esc($stats['categories']) ?></div>
+                                <div class="text-secondary small mt-1"><i class="bi bi-folder-fill me-1"></i>Categories</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <a href="/start/redirects" class="text-decoration-none">
+                        <div class="card h-100 bg-dark-subtle">
+                            <div class="card-body text-center">
+                                <div class="fs-2 fw-bold text-primary"><?= esc($stats['redirects']) ?></div>
+                                <div class="text-secondary small mt-1"><i class="bi bi-arrow-left-right me-1"></i>Redirects</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <a href="/start/search" class="text-decoration-none">
+                        <div class="card h-100 bg-dark-subtle">
+                            <div class="card-body text-center">
+                                <div class="fs-2 fw-bold text-primary"><?= esc($stats['search']) ?></div>
+                                <div class="text-secondary small mt-1"><i class="bi bi-search me-1"></i>Search Engines</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <a href="/start/history" class="text-decoration-none">
+                        <div class="card h-100 bg-dark-subtle">
+                            <div class="card-body text-center">
+                                <div class="fs-2 fw-bold text-primary"><?= esc($stats['history']) ?></div>
+                                <div class="text-secondary small mt-1"><i class="bi bi-clock-history me-1"></i>History Entries</div>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
 
-            <p>This is an example table with some sample data.</p>
+            <!-- Top searches -->
+            <div class="row g-3">
+                <div class="col-12 col-lg-6">
+                    <div class="card bg-dark-subtle">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <span class="fw-semibold"><i class="bi bi-bar-chart-fill me-2"></i>Top Searches</span>
+                            <a href="/start/history" class="btn btn-sm btn-outline-secondary">View all</a>
+                        </div>
+                        <?php if (empty($top_searches)): ?>
+                        <div class="card-body text-secondary">No search history yet.</div>
+                        <?php else: ?>
+                        <ul class="list-group list-group-flush">
+                            <?php foreach ($top_searches as $row): ?>
+                            <li class="list-group-item bg-transparent d-flex align-items-center justify-content-between gap-2">
+                                <a href="/?q=<?= esc(urlencode($row['q'])) ?>" class="text-truncate text-decoration-none text-body">
+                                    <?= esc($row['q']) ?>
+                                </a>
+                                <span class="badge text-bg-secondary flex-shrink-0"><?= esc($row['count']) ?></span>
+                            </li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <?php endif; ?>
+                    </div>
+                </div>
 
-            <div class="table-responsive">
-                <table id="example-table" class="table table-bordered table-striped table-hover align-middle" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Joined</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                <!-- Quick links -->
+                <div class="col-12 col-lg-6">
+                    <div class="card bg-dark-subtle">
+                        <div class="card-header fw-semibold">
+                            <i class="bi bi-lightning-fill me-2"></i>Quick Links
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-transparent">
+                                <a href="/admin/shortcuts" class="text-decoration-none text-body d-flex align-items-center gap-2">
+                                    <i class="bi bi-grid-3x3-gap-fill text-secondary"></i> Manage Shortcuts
+                                </a>
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <a href="/start/redirects" class="text-decoration-none text-body d-flex align-items-center gap-2">
+                                    <i class="bi bi-arrow-left-right text-secondary"></i> Manage Redirects
+                                </a>
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <a href="/start/search" class="text-decoration-none text-body d-flex align-items-center gap-2">
+                                    <i class="bi bi-search text-secondary"></i> Manage Search Engines
+                                </a>
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <a href="/start/history" class="text-decoration-none text-body d-flex align-items-center gap-2">
+                                    <i class="bi bi-clock-history text-secondary"></i> View Search History
+                                </a>
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <a href="/admin/import-export" class="text-decoration-none text-body d-flex align-items-center gap-2">
+                                    <i class="bi bi-arrow-down-up text-secondary"></i> Import / Export
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
-</div>
-<!-- Delete confirmation modal -->
-<div class="modal fade" id="modal-delete-confirm" tabindex="-1" aria-labelledby="modal-delete-confirm-label" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal-delete-confirm-label">Confirm Delete</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete <strong id="delete-modal-count">0</strong> selected record(s)? This action cannot be undone.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="btn-delete-confirm">Delete</button>
-            </div>
         </div>
     </div>
 </div>
