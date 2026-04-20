@@ -112,6 +112,43 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-history-delete').disabled = selectedIds.size === 0;
   }
 
+  // Collect history queries before DataTable reorders the DOM
+  const historyQueries = Array.from(
+    document.querySelectorAll('#table-history tbody tr td:nth-child(3) a')
+  ).map(a => a.textContent.trim());
+
+  // Up/down arrow navigation through history on the #q input
+  const qNavInput = document.getElementById('q');
+  if (qNavInput && historyQueries.length > 0) {
+    let historyNavIndex = -1;
+    let historyNavSaved = '';
+
+    qNavInput.addEventListener('keydown', function(e) {
+      if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+      e.preventDefault();
+
+      if (historyNavIndex === -1) {
+        historyNavSaved = qNavInput.value;
+      }
+
+      if (e.key === 'ArrowUp') {
+        historyNavIndex = Math.min(historyNavIndex + 1, historyQueries.length - 1);
+      } else {
+        historyNavIndex = Math.max(historyNavIndex - 1, -1);
+      }
+
+      qNavInput.value = historyNavIndex === -1 ? historyNavSaved : historyQueries[historyNavIndex];
+    });
+
+    qNavInput.addEventListener('input', function() {
+      historyNavIndex = -1;
+    });
+
+    document.getElementById('form-q')?.addEventListener('submit', function() {
+      historyNavIndex = -1;
+    });
+  }
+
   const historyTable = new DataTable('#table-history', {
     info:         true,
     lengthChange: true,
