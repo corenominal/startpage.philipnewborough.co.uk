@@ -15,7 +15,7 @@
                         <?php else: ?>
                             <i class="bi bi-link-45deg mb-1" style="font-size:2.5rem;"></i>
                         <?php endif; ?>
-                        <span class="text-center lh-sm" style="font-size:0.7rem;word-break:break-word;"><?= esc($shortcut['name']) ?></span>
+                        <span class="text-center lh-sm" style="font-size:0.7rem;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><?= esc($shortcut['name']) ?></span>
                     </a>
                 <?php endforeach; ?>
             </div>
