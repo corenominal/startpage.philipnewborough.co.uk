@@ -139,7 +139,7 @@ class Startpage extends BaseController
     private function processCommand(string $q): array
     {
         if ($q === '/ping') {
-            return ['notification' => 'pong!'];
+            return ['html' => '<p>pong!</p>'];
         }
 
         if ($q === '/hello') {
@@ -171,7 +171,7 @@ class Startpage extends BaseController
             }
         }
 
-        return ['notification' => 'Unrecognised command.'];
+        return ['html' => '<p>Unrecognised command.</p>'];
     }
 
     public function opensearch(): string
