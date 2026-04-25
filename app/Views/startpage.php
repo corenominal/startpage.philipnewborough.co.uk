@@ -16,7 +16,7 @@
                 <h5 class="card-header">Response</h5>
                 <div id="response_html" class="card-body"></div>
                 <div class="card-footer">
-                    <button id="btn-clear-html-response" class="btn btn-dark btn-sm"><i class="bi bi-x-square-fill"></i> Clear</button>
+                    <button id="btn-clear-html-response" class="btn btn-outline-primary"><i class="bi bi-x-square-fill"></i> Clear</button>
                 </div>
             </div>
         </div>
