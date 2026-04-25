@@ -169,6 +169,31 @@ class Startpage extends BaseController
                 $output = shell_exec('curl --head ' . escapeshellarg($args)) ?? '';
                 return ['html' => '<pre><code>' . htmlspecialchars($output, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</code></pre>'];
             }
+
+            if ($command === '/traceroute') {
+                $output = shell_exec('timeout 15 traceroute -w 2 -q 1 -m 20 ' . escapeshellarg($args) . ' 2>&1') ?? '';
+                return ['html' => '<pre><code>' . htmlspecialchars($output, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</code></pre>'];
+            }
+
+            if ($command === '/mx') {
+                $output = shell_exec('dig MX ' . escapeshellarg($args)) ?? '';
+                return ['html' => '<pre><code>' . htmlspecialchars($output, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</code></pre>'];
+            }
+
+            if ($command === '/ns') {
+                $output = shell_exec('dig NS ' . escapeshellarg($args)) ?? '';
+                return ['html' => '<pre><code>' . htmlspecialchars($output, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</code></pre>'];
+            }
+
+            if ($command === '/rdns') {
+                $output = shell_exec('dig -x ' . escapeshellarg($args)) ?? '';
+                return ['html' => '<pre><code>' . htmlspecialchars($output, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</code></pre>'];
+            }
+
+            if ($command === '/ssl') {
+                $output = shell_exec('openssl s_client -connect ' . escapeshellarg($args . ':443') . ' < /dev/null 2>&1') ?? '';
+                return ['html' => '<pre><code>' . htmlspecialchars($output, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</code></pre>'];
+            }
         }
 
         return ['html' => '<p>Unrecognised command.</p>'];
